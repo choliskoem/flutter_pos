@@ -4,9 +4,11 @@ import 'package:flutter_pos/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_pos/data/datasources/product_remote_datasource.dart';
 import 'package:flutter_pos/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_pos/presentation/auth/pages/login_page.dart';
+import 'package:flutter_pos/presentation/home/bloc/checkout/checkout_bloc.dart';
 import 'package:flutter_pos/presentation/home/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos/presentation/home/bloc/product/product_bloc.dart';
 import 'package:flutter_pos/presentation/home/pages/dashboard_page.dart';
+import 'package:flutter_pos/presentation/order/bloc/order/order_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,8 +32,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LogoutBloc(AuthRemoteDatasource()),
         ),
+        BlocProvider(
+          create: (context) => ProductBloc(ProductRemoteDatasource())
+            ..add(const ProductEvent.fetchLocal()),
+        ),
+        BlocProvider(
+          create: (context) => CheckoutBloc(),
+        ),
          BlocProvider(
-          create: (context) => ProductBloc(ProductRemoteDatasource())..add(const ProductEvent.fetchLocal()),
+          create: (context) => OrderBloc(),
         ),
       ],
       child: MaterialApp(

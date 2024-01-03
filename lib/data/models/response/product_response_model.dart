@@ -1,5 +1,8 @@
-import 'package:meta/meta.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 class ProductResponseModel {
   final bool success;
@@ -32,24 +35,26 @@ class ProductResponseModel {
 }
 
 class Product {
-  final int id;
+  final int? id;
   final String name;
-  final String description;
+  final String? description;
   final int price;
   final int stock;
   final String category;
   final String image;
+  final bool isBestSeller;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   Product({
-    required this.id,
+    this.id,
     required this.name,
-    required this.description,
+    this.description,
     required this.price,
     required this.stock,
     required this.category,
     required this.image,
+    this.isBestSeller = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -66,6 +71,8 @@ class Product {
         stock: json["stock"],
         category: json["category"],
         image: json["image"] ?? '',
+        isBestSeller: json["is_best_seller"] == 1 ? true : false,
+
         // createdAt: DateTime.parse(json["created_at"]),
         // updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -76,5 +83,62 @@ class Product {
         "stock": stock,
         "category": category,
         "image": image,
+        "is_best_seller": isBestSeller ? 1 : 0
       };
+
+  Product copyWith({
+    int? id,
+    String? name,
+    String? description,
+    int? price,
+    int? stock,
+    String? category,
+    String? image,
+    bool? isBestSeler,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      stock: stock ?? this.stock,
+      category: category ?? this.category,
+      image: image ?? this.image,
+      isBestSeller: isBestSeler ?? isBestSeller,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  bool operator ==(covariant Product other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.price == price &&
+        other.stock == stock &&
+        other.category == category &&
+        other.image == image &&
+        other.isBestSeller == isBestSeller &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        description.hashCode ^
+        price.hashCode ^
+        stock.hashCode ^
+        category.hashCode ^
+        image.hashCode ^
+        isBestSeller.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
+  }
 }
